@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Förare för en dag – Röda linjen (T14)</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<main class="container">
+  <header class="topbar">
+    <h1>Förare för en dag – Röda linjen (T14)</h1>
+    <div class="score-wrap">
+      <div class="score">Totala poäng: <strong id="totalScore">0</strong></div>
+      <div class="hint">Poäng ges bara vid rätt timing. Annars 0 p.</div>
+    </div>
+  </header>
+
+  <section class="grid">
+    <!-- Statuskort -->
+    <article class="card card-main">
+      <div class="label">Nuvarande station</div>
+      <div class="station" id="currentStation">—</div>
+      <div class="chips">
+        <span class="chip" id="interchanges">Ingen byte</span>
+        <span class="chip" id="phase">—</span>
+        <span class="chip" id="nextStation">Nästa: —</span>
+        <span class="chip chip-muted" id="terminalFlag" hidden>Slutstation</span>
+      </div>
+
+      <div class="timer">
+        <div class="timer-label">Timer</div>
+        <div class="bar">
+          <div class="bar-inner" id="timerBar" style="width:0%"></div>
+        </div>
+        <div class="timer-seconds"><span id="timerText">0</span>s</div>
+      </div>
+    </article>
+
+    <!-- Linjelista -->
+    <aside class="card card-list">
+      <div class="label">Linjekarta (förenklad)</div>
+      <ol class="stations" id="stationList"></ol>
+    </aside>
+
+    <!-- Utrop-knappar -->
+    <aside class="card card-controls">
+      <h2>Utrop</h2>
+      <button class="btn" id="btnNext">”Nästa station …”</button>
+      <button class="btn" id="btnInterchange">”Byte till …”</button>
+      <button class="btn" id="btnGap">”Tänk på avståndet …”</button>
+      <button class="btn" id="btnClosing">”Dörrarna stängs”</button>
+      <button class="btn" id="btnTerminal">”Slutstation …”</button>
+      <button class="btn btn-secondary" id="btnRestart">Starta om</button>
+    </aside>
+  </section>
+
+  <!-- Logg -->
+  <section class="card">
+    <h2>Händelselogg</h2>
+    <ul class="log" id="logList"></ul>
+  </section>
+
+  <!-- Poängtabell -->
+  <section class="card">
+    <h2>Poängtabell</h2>
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Kategori</th>
+          <th>Försök</th>
+          <th>Träffar</th>
+          <th>Poäng/Träff</th>
+          <th>Summa</th>
+        </tr>
+        </thead>
+        <tbody id="scoreRows">
+        <!-- Rader fylls i via JS -->
+        </tbody>
+        <tfoot>
+        <tr class="total">
+          <td>Totalt</td>
+          <td id="sumAttempts">0</td>
+          <td id="sumHits">0</td>
+          <td>—</td>
+          <td id="sumPoints">0</td>
+        </tr>
+        </tfoot>
+      </table>
+    </div>
+    <p class="hint">
+      Tips: ”Nästa station” mitt i färden (~hälften av körsträckan kvar). ”Dörrarna stängs” precis före avgång (sista sekunderna av uppehåll).
+      Övriga utrop under uppehåll. Extra plus för avstånds-utrop.
+    </p>
+  </section>
+</main>
+
+<script src=".js/app.js"></script>
+</body>
+</html>
+
