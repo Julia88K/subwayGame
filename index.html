@@ -1,102 +1,84 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="sv">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Förare för en dag – Röda linjen (T14)</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>SL-karta – Drag & Drop (live-data)</title>
+
+  <!-- Din CSS -->
+  <link rel="stylesheet" href="css/style.css?v=3" />
+
+  <!-- Leaflet CSS/JS (utan SRI för att undvika dev-blockeringar) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" defer></script>
+
+  <!-- App JS -->
+  <script src="js/app.js?v=3" defer></script>
 </head>
 <body>
-<main class="container">
-  <header class="topbar">
-    <h1>Förare för en dag – Röda linjen (T14)</h1>
-    <div class="score-wrap">
-      <div class="score">Totala poäng: <strong id="totalScore">0</strong></div>
-      <div class="hint">Poäng ges bara vid rätt timing. Annars 0 p.</div>
-    </div>
-  </header>
+<header class="app-header">
+  <h1>SL-karta – Drag & Drop</h1>
+  <p class="subtitle">Live-data från SL: Fyll i stationerna i rätt ordning och se tåget köra.</p>
+</header>
 
-  <section class="grid">
-    <!-- Statuskort -->
-    <article class="card card-main">
-      <div class="label">Nuvarande station</div>
-      <div class="station" id="currentStation">—</div>
-      <div class="chips">
-        <span class="chip" id="interchanges">Ingen byte</span>
-        <span class="chip" id="phase">—</span>
-        <span class="chip" id="nextStation">Nästa: —</span>
-        <span class="chip chip-muted" id="terminalFlag" hidden>Slutstation</span>
+<main class="layout">
+  <aside class="sidebar">
+    <section class="mission">
+      <h2>Uppdrag</h2>
+      <div id="missionText">
+        Åk från <strong id="fromName">Liljeholmen</strong> till
+        <strong id="toName">T-Centralen</strong>
       </div>
-
-      <div class="timer">
-        <div class="timer-label">Timer</div>
-        <div class="bar">
-          <div class="bar-inner" id="timerBar" style="width:0%"></div>
-        </div>
-        <div class="timer-seconds"><span id="timerText">0</span>s</div>
+      <div class="row">
+        <input id="fromInput" class="text" placeholder="Från (station/adress)" value="Liljeholmen" />
+        <input id="toInput" class="text" placeholder="Till (station/adress)" value="T-Centralen" />
       </div>
-    </article>
+      <div class="row">
+        <button id="planBtn" class="btn">Planera resa</button>
+        <button id="resetBtn" class="btn ghost">Återställ</button>
+      </div>
+    </section>
 
-    <!-- Linjelista -->
-    <aside class="card card-list">
-      <div class="label">Linjekarta (förenklad)</div>
-      <ol class="stations" id="stationList"></ol>
-    </aside>
+    <section class="progress">
+      <h3>Framsteg</h3>
+      <div id="progressText">0 / 0 stationer placerade</div>
+      <div class="bar"><div id="progressBar" class="bar-fill"></div></div>
+      <p id="tripMeta" class="meta"></p>
+    </section>
 
-    <!-- Utrop-knappar -->
-    <aside class="card card-controls">
-      <h2>Utrop</h2>
-      <button class="btn" id="btnNext">”Nästa station …”</button>
-      <button class="btn" id="btnInterchange">”Byte till …”</button>
-      <button class="btn" id="btnGap">”Tänk på avståndet …”</button>
-      <button class="btn" id="btnClosing">”Dörrarna stängs”</button>
-      <button class="btn" id="btnTerminal">”Slutstation …”</button>
-      <button class="btn btn-secondary" id="btnRestart">Starta om</button>
-    </aside>
-  </section>
+    <section class="help">
+      <h3>Tips</h3>
+      <ul class="bullets">
+        <li>Dra rätt stationsnamn till varje stopp (⬜) i ruttens ordning.</li>
+        <li>Om resan kräver byte visas <strong>Byte</strong> vid knutpunkten.</li>
+        <li>Kartan och stationerna kommer direkt från SL:s API.</li>
+      </ul>
+    </section>
 
-  <!-- Logg -->
-  <section class="card">
-    <h2>Händelselogg</h2>
-    <ul class="log" id="logList"></ul>
-  </section>
+    <section class="legend">
+      <h3>Teckenförklaring</h3>
+      <ul>
+        <li><span class="chip red"></span> Tunnelbana</li>
+        <li><span class="chip blue"></span> Pendeltåg</li>
+        <li><span class="chip purple"></span> Tvär-/lokalbanor</li>
+        <li><span class="chip gray"></span> Gång/okänd</li>
+      </ul>
+    </section>
 
-  <!-- Poängtabell -->
-  <section class="card">
-    <h2>Poängtabell</h2>
-    <div class="table-wrap">
-      <table class="table">
-        <thead>
-        <tr>
-          <th>Kategori</th>
-          <th>Försök</th>
-          <th>Träffar</th>
-          <th>Poäng/Träff</th>
-          <th>Summa</th>
-        </tr>
-        </thead>
-        <tbody id="scoreRows">
-        <!-- Rader fylls i via JS -->
-        </tbody>
-        <tfoot>
-        <tr class="total">
-          <td>Totalt</td>
-          <td id="sumAttempts">0</td>
-          <td id="sumHits">0</td>
-          <td>—</td>
-          <td id="sumPoints">0</td>
-        </tr>
-        </tfoot>
-      </table>
-    </div>
-    <p class="hint">
-      Tips: ”Nästa station” mitt i färden (~hälften av körsträckan kvar). ”Dörrarna stängs” precis före avgång (sista sekunderna av uppehåll).
-      Övriga utrop under uppehåll. Extra plus för avstånds-utrop.
-    </p>
+    <small class="fineprint">
+      Datakällor: SL Journey-planner v2 (stop-finder & trips). © OpenStreetMap-medverkande.
+    </small>
+  </aside>
+
+  <section class="board">
+    <div id="map"></div>
+    <!-- Lager för flyttbara namn -->
+    <div id="nameLayer" class="name-layer" aria-label="Stationsnamn att dra"></div>
   </section>
 </main>
 
-<script src=".js/app.js"></script>
+<footer class="app-footer">
+  <small>Denna app är en utbildningsprototyp. Inte officiellt affilierad med SL.</small>
+</footer>
 </body>
 </html>
-

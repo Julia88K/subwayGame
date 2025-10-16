@@ -1,77 +1,71 @@
-/*! HTML5 Boilerplate v9.0.1 | MIT License | https://html5boilerplate.com/ */
-
-/* main.css 3.0.0 | MIT License | https://github.com/h5bp/main.css#readme */
-/*
- * What follows is the result of much research on cross-browser styling.
- * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
- * Kroc Camen, and the H5BP dev community and team.
- */
-
-/* ==========================================================================
-   Base styles: opinionated defaults
-   ========================================================================== */
-
-
 :root{
-  --bg:#f6f6f7; --fg:#111; --muted:#6b7280;
-  --card:#fff; --chip:#eef0f3; --chip2:#f3f4f6;
-  --accent:#dc2626; /* röd linje */
-  --border:#e5e7eb;
+  --bg:#0e1217; --panel:#151a22; --text:#e8edf5; --muted:#a7b1c2;
+  --accent:#ffd166; --red:#e63946; --blue:#277da1; --purple:#8854d0; --gray:#7a8ba1;
+  --line:#263041; --slot:#1f2a3b; --slot-ok:#1f3b2a; --slot-bad:#3b1f1f;
 }
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;color:var(--fg);background:var(--bg)}
-.container{max-width:1000px;margin:0 auto;padding:24px}
-.topbar{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:16px}
-h1{font-size:1.6rem;margin:0}
-h2{font-size:1.1rem;margin:0 0 8px 0}
+html,body{height:100%}
+body{margin:0;background:#0b0f15;color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
 
-.grid{display:grid;grid-template-columns:2fr 1fr;grid-auto-rows:minmax(0,auto);gap:16px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
-.card-main{grid-column:1 / span 1}
-.card-list{grid-column:2 / span 1;max-height:320px;overflow:auto}
-.card-controls{grid-column:2 / span 1;display:flex;flex-direction:column;gap:10px}
+.app-header{padding:16px 20px;border-bottom:1px solid #1b2230;background:#0c1117;position:sticky;top:0;z-index:10}
+.app-header h1{margin:0 0 4px;font-size:22px}
+.subtitle{margin:0;color:var(--muted)}
 
-.label{font-size:.85rem;color:var(--muted)}
-.station{font-size:2rem;font-weight:700;margin-top:2px}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-.chip{background:var(--chip);border-radius:999px;padding:4px 10px;font-size:.85rem}
-.chip-muted{background:var(--chip2);color:#444}
+.layout{display:grid;grid-template-columns:320px 1fr;gap:16px;max-width:1200px;margin:16px auto;padding:0 16px}
+.sidebar{background:var(--panel);border:1px solid #1d2534;border-radius:14px;padding:14px;height:fit-content;position:sticky;top:76px}
+.sidebar h2,.sidebar h3{margin:0 0 8px}
+.sidebar section+section{margin-top:14px}
+.row{display:flex;gap:10px}
+.text{flex:1;background:#121827;border:1px solid #24314a;border-radius:10px;padding:8px;color:var(--text)}
+.btn{background:var(--line);border:1px solid #2a3447;border-radius:10px;color:var(--text);padding:8px 10px;cursor:pointer}
+.btn:hover{filter:brightness(1.1)}
+.btn.ghost{background:transparent}
 
-.timer{margin-top:16px}
-.timer-label{font-size:.8rem;color:var(--muted);margin-bottom:6px}
-.bar{height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden}
-.bar-inner{height:10px;background:var(--accent)}
-.timer-seconds{font-size:.8rem;color:var(--muted);margin-top:6px}
+.progress .bar{width:100%;height:8px;background:#1c2533;border-radius:999px;overflow:hidden;margin:6px 0}
+.bar-fill{height:100%;background:var(--accent);width:0%;transition:width .25s ease}
+.meta{color:var(--muted);font-size:13px}
+.bullets{padding-left:18px;margin:6px 0}
+.legend ul{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.chip{display:inline-block;width:14px;height:6px;border-radius:6px;margin-right:8px;vertical-align:middle}
+.chip.red{background:var(--red)}
+.chip.blue{background:var(--blue)}
+.chip.purple{background:var(--purple)}
+.chip.gray{background:var(--gray)}
+.fineprint{color:var(--muted);display:block;margin-top:8px}
 
-.stations{list-style:none;padding:0;margin:0}
-.stations li{display:flex;align-items:center;gap:8px;padding:6px 2px;border-bottom:1px dashed #eee}
-.dot{width:8px;height:8px;border-radius:50%}
-.dot-done{background:var(--accent)}
-.dot-now{background:#f87171}
-.dot-next{background:#d1d5db}
+.board{position:relative;border:1px solid #1a2130;border-radius:14px;min-height:640px;overflow:hidden}
+#map{height:640px;width:100%}
 
-.btn{appearance:none;border:1px solid var(--border);background:#fff;padding:10px 12px;border-radius:12px;cursor:pointer;font-weight:600}
-.btn:hover{transform:translateY(-1px)}
-.btn:active{transform:translateY(0)}
-.btn-secondary{background:#fafafa}
+/* Overlay ovanpå Leaflet */
+.name-layer{position:absolute;inset:0;pointer-events:none;z-index:700}
 
-.log{list-style:none;margin:0;padding:0;max-height:220px;overflow:auto}
-.log li{padding:6px 0;border-bottom:1px dashed #eee;color:#333}
-
-.table-wrap{overflow:auto}
-.table{width:100%;border-collapse:collapse}
-.table th,.table td{padding:8px;border-bottom:1px solid var(--border);text-align:left;font-size:.95rem}
-.table thead th{color:var(--muted);font-weight:600}
-.table tfoot td{font-weight:700}
-.total td{background:#fafafa}
-
-.score-wrap{text-align:right}
-.score{font-size:1rem}
-.hint{font-size:.85rem;color:var(--muted);margin-top:4px}
-
-/* Responsiv */
-@media (max-width: 800px){
-  .grid{grid-template-columns:1fr}
-  .card-list,.card-controls{grid-column:1 / span 1}
-  .station{font-size:1.6rem}
+/* Draggables (namn) */
+.draggable{
+  position:absolute;left:0;top:0;pointer-events:auto;user-select:none;
+  background:#172033;border:1px solid #22314a;border-radius:10px;padding:6px 10px;
+  color:var(--text);font-weight:600;font-size:14px;cursor:grab;box-shadow:0 6px 16px rgba(0,0,0,.25)
 }
+.draggable:active{cursor:grabbing}
+
+/* Slot-ikoner på kartan (Leaflet DivIcon) */
+.leaflet-div-icon{background:transparent;border:none}
+.slot{
+  background:#172033;border:1px solid #22314a;border-radius:10px;padding:4px 8px;color:#d8e2f1;font-weight:700;
+  white-space:nowrap
+}
+.slot.ok{background:var(--slot-ok);border-color:#2f5a3c}
+.slot.bad{background:var(--slot-bad);border-color:#5a2f2f}
+.slot .hint{opacity:.75;margin-left:6px}
+
+/* Tåg- och byte-markörer */
+.train-dot{background:#e5ecf6;border:2px solid #0c1117;border-radius:50%;width:14px;height:14px}
+.transfer-label{
+  background:#111; color:#fff; border:2px solid #fff; border-radius:8px; padding:2px 6px; font-weight:800
+}
+
+@media (max-width: 980px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{position:static}
+}
+
+
